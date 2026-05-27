@@ -71,6 +71,12 @@
   .submit-status.success { color: #2e7d32; }
   .submit-status.error { color: #c62828; }
 
+  .resources { margin-bottom: 1.75rem; }
+  .resources-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #888; margin-bottom: 8px; }
+  .resource-link { display: inline-flex; align-items: center; gap: 8px; margin-right: 12px; margin-bottom: 8px; padding: 8px 14px; background: #fff; border: 1px solid #ccc; border-radius: 8px; font-size: 13px; color: #1a5fa8; text-decoration: none; font-weight: 500; }
+  .resource-link:hover { background: #f0f5ff; border-color: #1a5fa8; }
+  .resource-icon { font-size: 16px; }
+
   @media (max-width: 500px) {
     .info-bar { grid-template-columns: 1fr; }
     .score-pct { font-size: 36px; }
@@ -111,6 +117,18 @@
       <label for="f-date">Date</label>
       <input type="date" id="f-date">
     </div>
+  </div>
+
+  <div class="resources">
+    <div class="resources-label">Reference documents</div>
+    <a class="resource-link" href="2026-07-01__Policies.pdf" target="_blank" download>
+      <span class="resource-icon">↓</span>
+      <span>2026 Policies (PDF)</span>
+    </a>
+    <a class="resource-link" href="2026-07-01__Protocols.pdf" target="_blank" download>
+      <span class="resource-icon">↓</span>
+      <span>2026 Protocols (PDF)</span>
+    </a>
   </div>
 
   <div class="role-toggle">
