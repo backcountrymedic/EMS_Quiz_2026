@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monterey County EMS — Policy & Protocol Review 2026</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f4f0; color: #1a1a1a; font-size: 15px; line-height: 1.6; min-height: 100vh; }
+  .page { max-width: 720px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+
+  header { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid #ddd; }
+  header .seal { display: flex; align-items: center; gap: 14px; margin-bottom: 1rem; }
+  header .seal-text { }
+  header .agency { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #666; }
+  header h1 { font-size: 22px; font-weight: 600; color: #1a1a1a; line-height: 1.3; }
+  header .subtitle { font-size: 13px; color: #666; margin-top: 4px; }
+
+  .info-bar { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1.5rem; }
+  .info-field { display: flex; flex-direction: column; gap: 4px; }
+  .info-field label { font-size: 12px; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.06em; }
+  .info-field input, .info-field select { height: 38px; border: 1px solid #ccc; border-radius: 6px; padding: 0 10px; font-size: 14px; font-family: inherit; background: #fff; color: #1a1a1a; width: 100%; }
+  .info-field input:focus, .info-field select:focus { outline: 2px solid #1a5fa8; outline-offset: -1px; border-color: transparent; }
+
+  .role-toggle { display: flex; gap: 8px; margin-bottom: 1.75rem; }
+  .role-toggle button { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #ccc; background: #fff; color: #555; font-size: 13px; font-family: inherit; font-weight: 500; cursor: pointer; transition: all 0.15s; }
+  .role-toggle button.active { background: #1a5fa8; color: #fff; border-color: #1a5fa8; }
+
+  .section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #888; margin: 1.75rem 0 0.75rem; padding-bottom: 6px; border-bottom: 1px solid #ddd; }
+
+  .question { background: #fff; border: 1px solid #ddd; border-radius: 10px; padding: 1.1rem 1.25rem; margin-bottom: 10px; transition: border-color 0.2s; }
+  .question.correct { border-color: #2e7d32; background: #f1f8f1; }
+  .question.incorrect { border-color: #c62828; background: #fdf3f3; }
+  .question .q-num { font-size: 11px; font-weight: 700; color: #aaa; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+  .question p.stem { font-size: 14px; font-weight: 600; color: #1a1a1a; margin-bottom: 10px; line-height: 1.5; }
+  .question.correct p.stem { color: #1b5e20; }
+  .question.incorrect p.stem { color: #b71c1c; }
+
+  .option { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 6px; padding: 6px 8px; border-radius: 6px; cursor: pointer; }
+  .option:hover { background: #f5f4f0; }
+  .option input[type=radio] { margin-top: 3px; flex-shrink: 0; accent-color: #1a5fa8; }
+  .option label { font-size: 13px; color: #333; line-height: 1.5; cursor: pointer; }
+  .question.correct .option label { color: #2e7d32; }
+  .question.incorrect .option label { color: #c62828; }
+
+  .feedback { font-size: 13px; margin-top: 10px; padding: 8px 12px; border-radius: 6px; display: none; line-height: 1.5; }
+  .feedback.show { display: block; }
+  .feedback.correct { background: #c8e6c9; color: #1b5e20; }
+  .feedback.incorrect { background: #ffcdd2; color: #b71c1c; }
+
+  .actions { display: flex; gap: 10px; margin-top: 2rem; flex-wrap: wrap; align-items: center; }
+  .btn { padding: 10px 20px; border-radius: 8px; border: 1px solid #ccc; background: #fff; font-size: 14px; font-family: inherit; font-weight: 500; cursor: pointer; transition: all 0.15s; color: #1a1a1a; }
+  .btn:hover { background: #f0f0f0; }
+  .btn.primary { background: #1a5fa8; color: #fff; border-color: #1a5fa8; }
+  .btn.primary:hover { background: #154d8a; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .score-card { background: #fff; border: 1px solid #ddd; border-radius: 12px; padding: 1.5rem; margin-top: 1.5rem; display: none; }
+  .score-card.show { display: block; }
+  .score-row { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  .score-pct { font-size: 48px; font-weight: 700; line-height: 1; }
+  .score-pct.pass { color: #2e7d32; }
+  .score-pct.fail { color: #c62828; }
+  .score-detail { font-size: 14px; color: #555; line-height: 1.8; }
+  .score-detail strong { color: #1a1a1a; }
+  .verdict { display: inline-block; margin-top: 0.5rem; padding: 4px 14px; border-radius: 99px; font-size: 13px; font-weight: 600; }
+  .verdict.pass { background: #c8e6c9; color: #1b5e20; }
+  .verdict.fail { background: #ffcdd2; color: #b71c1c; }
+
+  .submit-status { font-size: 13px; color: #555; margin-top: 0.5rem; width: 100%; }
+  .submit-status.success { color: #2e7d32; }
+  .submit-status.error { color: #c62828; }
+
+  @media (max-width: 500px) {
+    .info-bar { grid-template-columns: 1fr; }
+    .score-pct { font-size: 36px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div class="seal">
+      <div class="seal-text">
+        <div class="agency">Monterey County EMS Agency</div>
+        <h1>Policy &amp; Protocol Review — 2026</h1>
+        <div class="subtitle">80% correct required to pass &nbsp;·&nbsp; Complete all fields before submitting</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="info-bar">
+    <div class="info-field">
+      <label for="f-name">Full name</label>
+      <input type="text" id="f-name" placeholder="Last, First" autocomplete="name">
+    </div>
+    <div class="info-field">
+      <label for="f-agency">Agency / unit</label>
+      <input type="text" id="f-agency" placeholder="e.g. Monterey Fire">
+    </div>
+    <div class="info-field">
+      <label for="f-cert">Certification level</label>
+      <select id="f-cert">
+        <option value="">Select...</option>
+        <option>EMT</option>
+        <option>Paramedic</option>
+      </select>
+    </div>
+    <div class="info-field">
+      <label for="f-date">Date</label>
+      <input type="date" id="f-date">
+    </div>
+  </div>
+
+  <div class="role-toggle">
+    <button id="btn-emt" class="active" onclick="setRole('emt')">EMT — questions 1–10</button>
+    <button id="btn-para" onclick="setRole('para')">Paramedic — all questions</button>
+  </div>
+
+  <div id="quiz-form"></div>
+
+  <div class="actions">
+    <button class="btn primary" onclick="gradeQuiz()">Grade quiz</button>
+    <button class="btn" onclick="resetQuiz()">Reset</button>
+  </div>
+
+  <div class="score-card" id="score-card">
+    <div class="score-row">
+      <div class="score-pct" id="score-pct"></div>
+      <div class="score-detail" id="score-detail"></div>
+    </div>
+    <div class="actions" style="margin-top:0;">
+      <button class="btn primary" id="btn-submit" onclick="submitResults()" disabled>Submit results</button>
+      <div class="submit-status" id="submit-status"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwr79LMhiifkaR6zXtLtG8Y_VLNlocOOrQn7Wt96DgLW-02h1NbihTrwVzivY8PC_Sk/exec';
+
+const questions = [
+  { id:1, stem:"The overall objective of the EMS policy and protocol update training is to:", options:["Ensure that EMS System personnel are aware of the 2026 EMS policy and protocol updates","Ensure that EMS system personnel are able to correctly apply the policies and protocols in the appropriate circumstances","Both A and B","Train all EMS System personnel in the use of Military Anti-Shock Trousers (MASTs)"], answer:2, feedback:"Both awareness of the updates AND ability to correctly apply them are the stated objectives.", para:false },
+  { id:2, stem:"Criteria for the 911 Communications dispatcher to request an EMS Aircraft auto-launch include which of the following:", options:["Penetrating trauma to the head or trunk","Vehicle-pedestrian crash with loss of consciousness or major injury","Rabid skunk attack","Fall greater than 10 feet","A and B","A, B, and D","None of the above"], answer:4, feedback:"Auto-launch criteria include penetrating trauma to the head/trunk AND vehicle-pedestrian crash with LOC or major injury (A and B). Falls >10 ft are NOT an auto-launch criterion.", para:false },
+  { id:3, stem:"Consider requesting an EMS Aircraft for critically injured or unstable trauma patients when the anticipated ground transport time is greater than ___ minutes:", options:["30","45","60","90"], answer:1, feedback:"45 minutes — if ground transport exceeds 45 min, consider air transport.", para:false },
+  { id:4, stem:"The use of 'spit hoods' require EMS providers to adhere to all of the following precautions EXCEPT:", options:["Must monitor and continuously use pulse oximetry","Must monitor for signs of hypoxia","Must remove 'spit hood' if patient complains of shortness of breath","Must apply supplemental oxygen under hood"], answer:3, feedback:"Supplemental O2 under the hood is NOT required — the other three are all required precautions.", para:false },
+  { id:5, stem:"The two-rescuer CPR compression-to-ventilation ratio for adult patients WITHOUT an advanced airway is:", options:["5:1","6:1","15:2","30:2"], answer:3, feedback:"30:2 is the standard two-rescuer ratio without an advanced airway in place.", para:false },
+  { id:6, stem:"Patients WITH an advanced airway (supraglottic airway or ETT) should be ventilated once every ___ seconds:", options:["3","5","6","10"], answer:2, feedback:"Once every 6 seconds (10 breaths/min) with continuous compressions after advanced airway placement.", para:false },
+  { id:7, stem:"A negative BEFAST exam effectively rules out stroke as a possible cause of the patient's symptoms.", options:["True","False"], answer:1, feedback:"False — a negative BEFAST does NOT rule out stroke. It is a screening tool, not diagnostic.", para:false },
+  { id:8, stem:"Under Protocol T-5: Traumatic Cardiac Arrest, transport should be DELAYED in order to perform which of the following interventions at the scene?", options:["CPR","Intubation or supraglottic airway placement","Bilateral needle thoracostomy","IV/IO access","IV epinephrine","None of the above","All of the above"], answer:5, feedback:"None of the above — no scene interventions should delay transport in traumatic cardiac arrest. Load and go.", para:false },
+  { id:9, stem:"For a medical patient in cardiac arrest, CPR can be discontinued following base hospital contact once the patient is moved to the ambulance.", options:["True","False"], answer:1, feedback:"False — CPR cannot be discontinued based solely on base hospital contact and moving to the ambulance.", para:false },
+  { id:10, stem:"For a clinically stable patient with 1st or 2nd degree non-circumferential burns to the anterior chest and upper arm (TBSA < 30%), the most appropriate EMS intervention(s) are:", options:["Transport to a Burn Center","Transport to the closest Emergency Department","Remain on scene and irrigate the burn with cool running water for 20 minutes prior to transport","A and C","B and C"], answer:4, feedback:"Transport to the closest ED AND cool running water irrigation for 20 minutes on scene (B and C).", para:false },
+  { id:11, stem:"Paramedics applying for accreditation renewal must submit:", options:["Proof of California State paramedic licensure","ALS Skills Verification and Policy Update Form","Documentation of current successful course completion of ACLS, BCLS, PALS or equivalent, and PHTLS or equivalent trauma course","Proof of continued affiliation with an approved Monterey County EMS Paramedic Service Provider","All of the above"], answer:4, feedback:"All of the above are required for paramedic accreditation renewal.", para:true },
+  { id:12, stem:"Acceptable sites for needle pleural decompression in a 14-year-old patient include:", options:["2nd ICS at the midclavicular line on the affected side","4th or 5th ICS at the midaxillary line on the affected side","2nd ICS at the midclavicular line on the unaffected side","A and B","B and C"], answer:3, feedback:"Both the 2nd ICS MCL on the affected side AND the 4th/5th ICS MAL on the affected side are acceptable (A and B).", para:true },
+  { id:13, stem:"Acceptable sites for placement of an intraosseous (IO) needle in an adult include:", options:["Proximal tibia","Proximal femur","Sternum","Proximal humerus","A and D","A, C, and D"], answer:5, feedback:"Proximal tibia, sternum, and proximal humerus are all acceptable adult IO sites (A, C, and D).", para:true },
+  { id:14, stem:"A paramedic gives IV morphine, patient has minimal improvement, and switches to IV fentanyl. Does the paramedic need base hospital contact prior to administering fentanyl?", options:["Yes","No"], answer:1, feedback:"No — switching between analgesics for pain control does not require base hospital contact per protocol.", para:true },
+  { id:15, stem:"Per Protocol T-5: Traumatic Cardiac Arrest, which medications are indicated for a patient being transported in traumatic cardiac arrest?", options:["Epinephrine","Lidocaine","TXA","Sodium bicarbonate","Dopamine","All of the above","None of the above"], answer:2, feedback:"TXA (tranexamic acid) is the indicated medication for traumatic cardiac arrest transport.", para:true },
+  { id:16, stem:"Buprenorphine is contraindicated in all the following patients EXCEPT:", options:["Are less than 16 years of age","Have had any methadone within the last 10 days","Are pregnant","Have a severe medical illness","Have no opioid withdrawal signs or symptoms"], answer:3, feedback:"Severe medical illness alone is not a contraindication to buprenorphine — the others listed ARE contraindications.", para:true },
+  { id:17, stem:"A firefighter falls through the roof of a 3-story building during a structure fire. He is confused, hypotensive, has a probable femur fracture, and sustained significant burns to his face and neck. Most appropriate destination:", options:["Natividad","Santa Clara Valley Medical Center","Stanford","CHOMP","UCSF"], answer:1, feedback:"Santa Clara Valley Medical Center — Level I Trauma Center with burn capabilities, appropriate for this multi-system trauma and burn patient.", para:true },
+  { id:18, stem:"A 62-year-old male is found on the floor of his bedroom, fell due to dizziness when getting up at 2am. Denies injury but unable to stand due to ongoing vertigo. Most appropriate action(s):", options:["Assist patient back into bed","Have patient sign AMA","Obtain history and perform thorough physical exam","Perform EKG","Obtain vital signs","Request ambulance and convince patient to be transported","A and B","D and E","C, D, E, and F"], answer:8, feedback:"Full assessment (history, exam, vitals, EKG) plus requesting transport is appropriate — this presentation warrants evaluation (C, D, E, and F).", para:true },
+  { id:19, stem:"An 84-year-old nursing home patient with chest pain has an EKG showing A-fib with wide QRS, mild ST elevation V4-V6, rate 146 bpm, SOB, and confusion. There is disagreement between providers about whether this is a STEMI. Best approach:", options:["Argue at scene and file U/O reporting rude providers","Work together collegially — case is complicated and requires teamwork","Contact Base Hospital for medical direction","Transmit EKG to hospital for physician review","If STEMI concern, transport Code 3 to STEMI Receiving Center","Gather medical records and advance directive from nursing home","File U/O reporting excellent teamwork after the call","B, C, D, E, F, and G","None of the above"], answer:7, feedback:"All of B through G — teamwork, base hospital contact, EKG transmission, STEMI transport consideration, gathering records, and a positive U/O.", para:true },
+  { id:20, stem:"Policy 4511 of the Monterey County EMS Mobile Field Manual app contains detailed information on the initial assessment and troubleshooting of patients with LVADs and Total Artificial Hearts.", options:["True","False"], answer:0, feedback:"True — Policy 4511 covers LVAD and TAH assessment and troubleshooting.", para:true },
+];
+
+let role = 'emt';
+let lastResults = null;
+
+document.getElementById('f-date').valueAsDate = new Date();
+
+function setRole(r) {
+  role = r;
+  document.getElementById('btn-emt').className = r === 'emt' ? 'active' : '';
+  document.getElementById('btn-para').className = r === 'para' ? 'active' : '';
+  renderQuiz();
+}
+
+function visibleQuestions() {
+  return role === 'para' ? questions : questions.filter(q => !q.para);
+}
+
+function renderQuiz() {
+  const form = document.getElementById('quiz-form');
+  form.innerHTML = '';
+  let section = '';
+  visibleQuestions().forEach(q => {
+    const sec = q.para ? 'ALS — Paramedic only' : 'BLS — EMT and Paramedic';
+    if (sec !== section) {
+      section = sec;
+      const lbl = document.createElement('div');
+      lbl.className = 'section-label';
+      lbl.textContent = sec;
+      form.appendChild(lbl);
+    }
+    const div = document.createElement('div');
+    div.className = 'question';
+    div.id = 'q' + q.id;
+    div.innerHTML = '<div class="q-num">Question ' + q.id + '</div>';
+    const stem = document.createElement('p');
+    stem.className = 'stem';
+    stem.textContent = q.stem;
+    div.appendChild(stem);
+    q.options.forEach((opt, i) => {
+      const row = document.createElement('div');
+      row.className = 'option';
+      row.innerHTML = '<input type="radio" name="q' + q.id + '" value="' + i + '" id="q' + q.id + '_' + i + '"><label for="q' + q.id + '_' + i + '">' + String.fromCharCode(65+i) + '. ' + opt + '</label>';
+      div.appendChild(row);
+    });
+    const fb = document.createElement('div');
+    fb.className = 'feedback';
+    fb.id = 'fb' + q.id;
+    div.appendChild(fb);
+    form.appendChild(div);
+  });
+  document.getElementById('score-card').classList.remove('show');
+  document.getElementById('btn-submit').disabled = true;
+  document.getElementById('submit-status').textContent = '';
+  lastResults = null;
+}
+
+function gradeQuiz() {
+  const name = document.getElementById('f-name').value.trim();
+  if (!name) { alert('Please enter your name before grading.'); document.getElementById('f-name').focus(); return; }
+
+  const qs = visibleQuestions();
+  let correct = 0, answered = 0;
+  const answerLog = [];
+
+  qs.forEach(q => {
+    const sel = document.querySelector('input[name="q' + q.id + '"]:checked');
+    const div = document.getElementById('q' + q.id);
+    const fb = document.getElementById('fb' + q.id);
+    div.className = 'question';
+    if (!sel) {
+      fb.className = 'feedback';
+      answerLog.push({ qid: q.id, chosen: 'No answer', correct: false });
+      return;
+    }
+    answered++;
+    const chosen = parseInt(sel.value);
+    const isCorrect = chosen === q.answer;
+    if (isCorrect) correct++;
+    div.classList.add(isCorrect ? 'correct' : 'incorrect');
+    fb.className = 'feedback ' + (isCorrect ? 'correct' : 'incorrect') + ' show';
+    fb.innerHTML = '<strong>' + (isCorrect ? 'Correct.' : 'Incorrect.') + '</strong> ' + (isCorrect ? '' : 'Correct answer: ' + String.fromCharCode(65+q.answer) + '. ') + q.feedback;
+    answerLog.push({ qid: q.id, chosen: String.fromCharCode(65+chosen), correct: isCorrect });
+  });
+
+  const total = qs.length;
+  const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
+  const pass = pct >= 80;
+
+  lastResults = {
+    name: name,
+    agency: document.getElementById('f-agency').value.trim(),
+    cert: document.getElementById('f-cert').value,
+    date: document.getElementById('f-date').value,
+    role: role === 'para' ? 'Paramedic' : 'EMT',
+    score: pct,
+    correct: correct,
+    total: total,
+    pass: pass ? 'Pass' : 'Fail',
+    answers: answerLog
+  };
+
+  const sc = document.getElementById('score-card');
+  sc.classList.add('show');
+  const pctEl = document.getElementById('score-pct');
+  pctEl.textContent = pct + '%';
+  pctEl.className = 'score-pct ' + (pass ? 'pass' : 'fail');
+  document.getElementById('score-detail').innerHTML =
+    '<strong>' + correct + ' of ' + total + ' correct</strong><br>' +
+    (answered < total ? (total - answered) + ' question(s) unanswered<br>' : '') +
+    '<span class="verdict ' + (pass ? 'pass' : 'fail') + '">' + (pass ? 'Pass ✓' : 'Did not pass') + '</span>';
+
+  document.getElementById('btn-submit').disabled = false;
+  sc.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function submitResults() {
+  if (!lastResults) return;
+  const btn = document.getElementById('btn-submit');
+  const status = document.getElementById('submit-status');
+  btn.disabled = true;
+  btn.textContent = 'Submitting…';
+  status.textContent = '';
+  status.className = 'submit-status';
+
+  const answerString = lastResults.answers.map(a => 'Q' + a.qid + ':' + a.chosen + (a.correct ? '✓' : '✗')).join('  ');
+
+  const payload = {
+    name: lastResults.name,
+    agency: lastResults.agency,
+    cert: lastResults.cert,
+    date: lastResults.date,
+    role: lastResults.role,
+    score: lastResults.score + '%',
+    correct: lastResults.correct,
+    total: lastResults.total,
+    pass: lastResults.pass,
+    answers: answerString
+  };
+
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  })
+  .then(() => {
+    status.textContent = 'Results submitted successfully. ✓';
+    status.className = 'submit-status success';
+    btn.textContent = 'Submitted ✓';
+  })
+  .catch(() => {
+    status.textContent = 'Submission failed — please contact your instructor.';
+    status.className = 'submit-status error';
+    btn.disabled = false;
+    btn.textContent = 'Retry submission';
+  });
+}
+
+function resetQuiz() {
+  document.querySelectorAll('input[type=radio]').forEach(r => r.checked = false);
+  document.querySelectorAll('.question').forEach(d => d.className = 'question');
+  document.querySelectorAll('.feedback').forEach(f => f.className = 'feedback');
+  document.getElementById('score-card').classList.remove('show');
+  document.getElementById('btn-submit').disabled = true;
+  document.getElementById('submit-status').textContent = '';
+  lastResults = null;
+}
+
+renderQuiz();
+</script>
+</body>
+</html>
