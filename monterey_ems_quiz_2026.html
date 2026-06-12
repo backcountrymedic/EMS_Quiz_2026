@@ -22,9 +22,7 @@
   .info-field input, .info-field select { height: 38px; border: 1px solid #ccc; border-radius: 6px; padding: 0 10px; font-size: 14px; font-family: inherit; background: #fff; color: #1a1a1a; width: 100%; }
   .info-field input:focus, .info-field select:focus { outline: 2px solid #1a5fa8; outline-offset: -1px; border-color: transparent; }
 
-  .role-toggle { display: flex; gap: 8px; margin-bottom: 1.75rem; }
-  .role-toggle button { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #ccc; background: #fff; color: #555; font-size: 13px; font-family: inherit; font-weight: 500; cursor: pointer; transition: all 0.15s; }
-  .role-toggle button.active { background: #1a5fa8; color: #fff; border-color: #1a5fa8; }
+  .role-toggle { display: none; }
 
   .section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #888; margin: 1.75rem 0 0.75rem; padding-bottom: 6px; border-bottom: 1px solid #ddd; }
 
@@ -182,7 +180,7 @@ const questions = [
   { id:20, stem:"Policy 4511 of the Monterey County EMS Mobile Field Manual app contains detailed information on the initial assessment and troubleshooting of patients with LVADs and Total Artificial Hearts.", options:["True","False"], answer:0, feedback:"True — Policy 4511 covers LVAD and TAH assessment and troubleshooting.", para:true },
 ];
 
-let role = 'emt';
+let role = 'para';
 let lastResults = null;
 
 document.getElementById('f-date').valueAsDate = new Date();
