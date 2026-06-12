@@ -104,14 +104,6 @@
       <input type="text" id="f-agency" placeholder="e.g. Monterey Fire">
     </div>
     <div class="info-field">
-      <label for="f-cert">Certification level</label>
-      <select id="f-cert">
-        <option value="">Select...</option>
-        <option>EMT</option>
-        <option>Paramedic</option>
-      </select>
-    </div>
-    <div class="info-field">
       <label for="f-date">Date</label>
       <input type="date" id="f-date">
     </div>
@@ -187,13 +179,11 @@ document.getElementById('f-date').valueAsDate = new Date();
 
 function setRole(r) {
   role = r;
-  document.getElementById('btn-emt').className = r === 'emt' ? 'active' : '';
-  document.getElementById('btn-para').className = r === 'para' ? 'active' : '';
   renderQuiz();
 }
 
 function visibleQuestions() {
-  return role === 'para' ? questions : questions.filter(q => !q.para);
+  return questions;
 }
 
 function renderQuiz() {
@@ -270,7 +260,7 @@ function gradeQuiz() {
   lastResults = {
     name: name,
     agency: document.getElementById('f-agency').value.trim(),
-    cert: document.getElementById('f-cert').value,
+    cert: 'Paramedic',
     date: document.getElementById('f-date').value,
     role: role === 'para' ? 'Paramedic' : 'EMT',
     score: pct,
